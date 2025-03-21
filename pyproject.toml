@@ -1,22 +1,26 @@
 [project]
 name = "gitx"
-version = "0.1.0"
+version = "0.1.0-a1"
 description = "TUI based git helper"
 authors = [
-    {name = "Ayush",email = "mail@ayuch.dev"},
-    {name = "Ashmit9955",email = "ashmit9955@gmail.com"},
-    {name = "Anmol-Puri-coder",email = "anmolpuri954@gmail.com"}
+    { name = "Ayush", email = "mail@ayuch.dev" },
+    { name = "Ashmit Singh", email = "ashmit9955@gmail.com" },
+    { name = "Anmol Puri", email = "anmolpuri954@gmail.com" },
 ]
-license = {text = "LICENSE"}
+license = { text = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.10, <4.0"
-dependencies = [
-    "textual (>=2.1.2,<3.0.0)"
-]
+dependencies = ["textual (>=2.1.2,<3.0.0)"]
 
-[tool.poetry]
-package-mode = false
+# [tool.poetry]
+# package-mode = false
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+flake8 = "^7.1.2"
+autopep8 = "^2.3.2"
+autoflake = "^2.3.1"
+isort = "^6.0.1"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
