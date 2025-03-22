@@ -2,6 +2,10 @@
 
 TUI based git helper
 
-## Installation Guide
+## Documentation
 
--   [Installation Guide](./docs/installation.md)
+Check out our [documentation site](https://gitxtui.github.io/gitx/) for comprehensive information about gitx.
+
+## Quick Links
+
+-   [Installation Guide](https://gitxtui.github.io/gitx/installation/)
