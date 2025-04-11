@@ -11,10 +11,51 @@ authors = [
 license = { text = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.9, <4.0"
-dependencies = ["textual (>=2.1.2,<3.0.0)"]
+dependencies = ["textual>=2.1.2,<3.0.0"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Version Control :: Git",
+]
 
-# [tool.poetry]
-# package-mode = false
+[project.scripts]
+gitxtui = "gitx.main:main"
+
+[project.urls]
+Homepage = "https://github.com/gitxtui/gitx"
+Documentation = "https://gitxtui.github.io/gitx/"
+Issues = "https://github.com/gitxtui/gitx/issues"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "gitxtui"
+version = "0.1.0-a1"
+description = "TUI based git helper"
+authors = [
+    "Ayush <mail@ayuch.dev>",
+    "Ashmit Singh <ashmit9955@gmail.com>",
+    "Anmol Puri <anmolpuri954@gmail.com>",
+    "Anmol Kakkar <anmolarora0014@gmail.com>",
+]
+readme = "README.md"
+packages = [{ include = "gitx", from = "src" }]
+
+[tool.poetry.scripts]
+gitxtui = "gitx.main:main"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+textual = ">=2.1.2,<3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
@@ -27,7 +68,3 @@ mkdocs-material = "^9.6.9"
 materialx = "^1.39.3"
 pymdown-extensions = "^10.14.3"
 material = "^0.1"
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"

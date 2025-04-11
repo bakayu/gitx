@@ -18,10 +18,10 @@ theme:
     # Dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: black
+      accent: black
       toggle:
-        icon: material/brightness-4
+        icon: material/brightness-5
         name: Switch to light mode
   features:
     - navigation.instant
@@ -32,9 +32,18 @@ theme:
     - navigation.footer
     - content.code.copy
     - toc.follow
+    - navigation.tabs
+    # - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.path
+    - toc.integrate
+    # - navigation.expand
 
 extra_css:
   - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/textual-theme.js
 
 markdown_extensions:
   - pymdownx.highlight:

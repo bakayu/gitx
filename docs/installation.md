@@ -65,6 +65,24 @@ Installation Guide for gitx
     > [!NOTE]
     > For further information about poetry and managing environments refer to the [poetry docs](https://python-poetry.org/docs/managing-environments/).
 
+5. To install and run the `gitx` package, run the following commands:
+
+    ```sh
+    # Install the package in development mode
+    poetry install
+
+    # Run the app using the entry point
+    poetry run gitxtui # or simply `gitxtui` if already in poetry environment
+    ```
+
+6. To build the package, run:
+
+    ```sh
+    poetry build
+
+    # This will create dist/gitxtui-<version>.tar.gz and dist/gitxtui-<version>-none-any.whl
+    ```
+
 ## Running Tests
 
 Run the test suite using pytest:
