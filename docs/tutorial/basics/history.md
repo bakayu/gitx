@@ -38,3 +38,24 @@ For a more concise view, `git log --oneline` shows each commit in a single line,
 ```bash
 git log --oneline
 ```
+
+### 🔹 Showing Specific Commits
+
+To view detailed information about a specific commit, use `git show <commit>`, replacing `<commit>` with the commit hash. This will display changes made in the commit, along with the commit metadata.
+
+```bash
+bash
+CopyEdit
+git show <commit-hash>
+```
+
+## Viewing History for Specific Files
+
+### 🔹 History of a Specific File
+
+If you want to view the commit history for a specific file, use `git log <file>`. This will show all the commits that modified that particular file.
+
+```bash
+git log <file-name>
+```
+
