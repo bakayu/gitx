@@ -20,3 +20,21 @@ Git provides several commands to view your repository's history. Here's a summar
 | `git log <file>` | Shows the commit history for a specific file. |
 
 ---
+
+## Viewing Commit History
+
+### 🔹 Basic Log
+
+The most commonly used command to view the history of commits is `git log`. It shows detailed information about each commit, including the commit hash, author, date, and commit message.
+
+```bash
+git log
+```
+
+### 🔹 Simplified Log
+
+For a more concise view, `git log --oneline` shows each commit in a single line, displaying the commit hash and the commit message.
+
+```bash
+git log --oneline
+```
