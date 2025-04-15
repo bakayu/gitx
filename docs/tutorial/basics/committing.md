@@ -20,3 +20,28 @@ These are new files in your working directory that Git doesn't know about yet.
 - Will not be part of any commit until added
 
 ---
+
+- These files are ready to be committed
+
+---
+
+### 🔹 Committed Changes
+
+Once files are staged, you can commit them to the repository history, creating a snapshot of the changes.
+
+---
+
+## Summary of Commands
+
+| Action | Command |
+| --- | --- |
+| Check file status | `git status` |
+| Add new/modified file to staging | `git add <file>` |
+| Unstage a file | `git restore --staged <file>` |
+| Commit staged changes | `git commit -m "message"` |
+
+---
+
+## Conclusion
+
+Committing in Git isn’t just a single step—it’s the final stage in a flow that moves files from **untracked → unstaged → staged → committed**. Mastering this flow is essential for effective version control.
