@@ -1,7 +1,7 @@
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Container, Grid
-from textual.widgets import Header, Footer, Static
+from textual.widgets import Header, Footer
 
 from gitx.widgets.status_panel import StatusPanel
 from gitx.widgets.file_tree import FileTree
