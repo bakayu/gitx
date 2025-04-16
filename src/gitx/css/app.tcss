@@ -1,39 +1,179 @@
-/* Base application styles */
+/* Base application styles inspired by LazyGit */
 Screen {
-    background: $surface;
-    color: $text;
-    layout: vertical;
+    background: #0d1117;
+    color: #c9d1d9;
 }
 
 Header {
     dock: top;
     height: 1;
+    background: #161b22;
+    color: #c9d1d9;
 }
 
 Footer {
     dock: bottom;
     height: 1;
+    background: #161b22;
+    color: #58a6ff;
 }
 
-/* Common styles that apply to the whole app */
-.welcome {
-    width: 100%;
+/* Grid layout */
+#app-layout {
+    layout: grid;
+    grid-size: 2;
+    grid-rows: 1fr 3fr 1fr 1fr;
+    grid-columns: 1fr 2fr;
+}
+
+#left-panels {
+    row-span: 4;
+    column-span: 1;
+    layout: vertical;
+    background: #0d1117;
+    border-right: solid #30363d;
+}
+
+#right-panels {
+    row-span: 4;
+    column-span: 1;
+    layout: vertical;
+    background: #0d1117;
+}
+
+#bottom-panel {
+    row-span: 1;
+    column-span: 2;
     height: 100%;
-    align: center middle;
-    background: $surface;
+    background: #0d1117;
+    border-top: solid #30363d;
 }
 
-.welcome-title {
+/* Panel styles */
+.panel {
+    border: none;
+    padding: 0 0 0 0;
+    height: 1fr;
+    overflow: auto;
+}
+
+.section-title {
     text-style: bold;
-    text-align: center;
-    margin-bottom: 1;
-    color: $accent;
+    background: #21262d;
+    color: #89b4fa;
+    padding: 0 1;
     width: 100%;
+    text-align: left;
     height: 1;
 }
 
-.welcome-text {
-    text-align: center;
-    margin-bottom: 1;
+/* Status panel */
+#status-panel {
+    height: auto;
+    margin-bottom: 0;
+    border-bottom: solid #30363d;
+}
+
+.status-row {
+    height: 1;
+    margin-bottom: 0;
+    padding: 0 1;
+}
+
+.status-label {
+    width: 30%;
+    text-style: bold;
+    color: #c9d1d9;
+}
+
+.status-value {
+    width: 70%;
+    color: #7ee787;
+}
+
+/* Command panel */
+#command-panel {
     width: 100%;
+    height: 100%;
+}
+
+#command-row {
+    width: 100%;
+    height: auto;
+    background: #21262d;
+}
+
+#command-input {
+    width: 4fr;
+    background: #0d1117;
+    color: #c9d1d9;
+    border: none;
+    height: 1;
+    padding: 0 1;
+    margin: 0;
+}
+
+#run-command-btn {
+    width: 1fr;
+    background: #388bfd;
+    color: #ffffff;
+    height: 1;
+    margin: 0;
+}
+
+#command-output {
+    width: 100%;
+    height: 1fr;
+    background: #0d1117;
+    color: #8b949e;
+    padding: 1;
+}
+
+/* Trees and tables */
+Tree {
+    padding: 0;
+}
+
+Tree > .tree--cursor {
+    background: #21262d;
+    color: #e6edf3;
+}
+
+Tree > .tree--highlight {
+    background: #388bfd;
+    color: #ffffff;
+}
+
+/* Rich log styling */
+RichLog {
+    background: #0d1117;
+    color: #c9d1d9;
+    border: none;
+    padding: 0 1;
+}
+
+Button {
+    background: #21262d;
+    color: #c9d1d9;
+    border: none;
+}
+
+Button:hover {
+    background: #30363d;
+}
+
+Button.active {
+    background: #388bfd;
+    color: #ffffff;
+}
+
+/* Input field styling */
+Input {
+    background: #0d1117;
+    color: #c9d1d9;
+    border: solid #30363d;
+}
+
+Input:focus {
+    border: solid #388bfd;
 }
