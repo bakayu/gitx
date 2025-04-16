@@ -26,53 +26,87 @@ class MainPanel(Static):
         content.clear()
         content.write("Select a file to view its contents or a commit to view its details.")
 
-    def show_file_diff(self, file_path: str) -> None:
-        """Show the diff content of a file."""
+    def show_file_diff(self, file_path: str, staged: bool = False) -> None:
+        """Show the diff content of a file.
+
+        Args:
+            file_path: Path to the file
+            staged: Whether to show the staged diff
+        """
         content = self.query_one("#main-content", RichLog)
         content.clear()
 
         # Update the title
-        self.query_one(".section-title", Label).update(f"[bold]4-Diff: {file_path}[/bold]")
+        staging_status = "Staged" if staged else "Unstaged"
+        self.query_one(".section-title", Label).update(f"[bold]4-Diff: {file_path} ({staging_status})[/bold]")
 
-        # Add some dummy diff content
-        content.write("[green]diff --git a/app.py b/app.py[/green]")
-        content.write("[green]index 1234567..abcdefg 100644[/green]")
-        content.write("[green]--- a/app.py[/green]")
-        content.write("[green]+++ b/app.py[/green]")
-        content.write("[cyan]@@ -20,7 +20,7 @@[/cyan] def some_function():")
-        content.write("     # Some comment")
-        content.write("     print('Hello')")
-        content.write("[red]-    return False[/red]")
-        content.write("[green]+    return True[/green]")
-        content.write("     ")
-        content.write("     # Another comment")
-        content.write("[cyan]@@ -35,6 +35,9 @@[/cyan] def another_function():")
-        content.write("     # Process data")
-        content.write("[green]+    # New functionality[/green]")
-        content.write("[green]+    result = process_data()[/green]")
-        content.write("[green]+    return result[/green]")
+        try:
+            # Get the actual diff from git
+            diff_output = self.app.git.get_file_diff(file_path, staged)
+
+            if not diff_output:
+                content.write("[yellow]No changes detected in this file.[/yellow]")
+                return
+
+            # Parse and colorize the diff output
+            for line in diff_output.splitlines():
+                if line.startswith("+") and not line.startswith("+++"):
+                    content.write(f"[green]{line}[/green]")
+                elif line.startswith("-") and not line.startswith("---"):
+                    content.write(f"[red]{line}[/red]")
+                elif line.startswith("@@"):
+                    content.write(f"[cyan]{line}[/cyan]")
+                elif line.startswith("diff") or line.startswith("index") or line.startswith("---") or line.startswith("+++"):
+                    content.write(f"[green]{line}[/green]")
+                else:
+                    content.write(line)
+        except Exception as e:
+            content.write(f"[red]Error displaying diff: {str(e)}[/red]")
 
     def show_commit_details(self, commit_hash: str) -> None:
-        """Show the details of a commit."""
+        """Show the details of a commit.
+
+        Args:
+            commit_hash: The commit hash to display
+        """
         content = self.query_one("#main-content", RichLog)
         content.clear()
 
         # Update the title
         self.query_one(".section-title", Label).update(f"[bold]4-Commit: {commit_hash}[/bold]")
 
-        # Add commit details
-        content.write(f"[yellow]commit[/yellow] [green]{commit_hash}[/green]")
-        content.write("[blue]Author:[/blue] Ayush <mail@ayush.dev>")
-        content.write("[blue]Date:[/blue]   3 minutes ago")
-        content.write("")
-        content.write("    widgets cn 1")
-        content.write("    ")
-        content.write("    [blue]Signed-off-by:[/blue] Ayush <mail@ayush.dev>")
-        content.write("")
-        content.write("[bold]Changed files:[/bold]")
-        content.write("[red]- app.py[/red]")
-        content.write("[red]- README.md[/red]")
-        content.write("[green]+ utils.py[/green]")
+        try:
+            # Get the actual commit details from git
+            details = self.app.git.get_commit_details(commit_hash)
+
+            if not details:
+                content.write(f"[red]Could not find commit: {commit_hash}[/red]")
+                return
+
+            # Show basic commit info
+            content.write(f"[yellow]commit[/yellow] [green]{details['hash']}[/green]")
+            content.write(f"[blue]Author:[/blue] {details['author']}")
+            content.write(f"[blue]Date:[/blue]   {details['date']}")
+            content.write("")
+
+            # Show commit message with proper indentation
+            for line in details['message'].split("\n"):
+                content.write(f"    {line}")
+            content.write("")
+
+            # Show changed files
+            content.write("[bold]Changed files:[/bold]")
+
+            for file in details['changed_files'].get('deleted', []):
+                content.write(f"[red]- {file}[/red]")
+
+            for file in details['changed_files'].get('modified', []):
+                content.write(f"[yellow]~ {file}[/yellow]")
+
+            for file in details['changed_files'].get('added', []):
+                content.write(f"[green]+ {file}[/green]")
+        except Exception as e:
+            content.write(f"[red]Error displaying commit details: {str(e)}[/red]")
 
     def show_welcome(self) -> None:
         """Show welcome message."""
