@@ -229,34 +229,6 @@ class GitxApp(App):
 
         self.push_screen(HelpScreen())
 
-    def action_stage_file(self) -> None:
-        """Stage the selected file."""
-        self.notify("Action: Stage file (not implemented yet)")
-
-    def action_unstage_file(self) -> None:
-        """Unstage the selected file."""
-        self.notify("Action: Unstage file (not implemented yet)")
-
-    def action_commit(self) -> None:
-        """Commit staged changes."""
-        self.notify("Action: Commit (not implemented yet)")
-
-    def action_push(self) -> None:
-        """Push changes to remote."""
-        self.notify("Action: Push (not implemented yet)")
-
-    def action_pull(self) -> None:
-        """Pull changes from remote."""
-        self.notify("Action: Pull (not implemented yet)")
-
-    def action_new_branch(self) -> None:
-        """Create a new branch."""
-        self.notify("Action: New branch (not implemented yet)")
-
-    def action_toggle_help(self) -> None:
-        """Toggle help screen."""
-        self.notify("Action: Help (not implemented yet)")
-
 
 def main() -> None:
     """Run the app."""
