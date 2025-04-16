@@ -28,6 +28,9 @@ class GitxApp(App):
         Binding(key="f", action="pull", description="Pull (fetch)"),
         Binding(key="b", action="new_branch", description="New branch"),
         Binding(key="r", action="refresh", description="Refresh"),
+        Binding(key="?", action="toggle_help", description="Help"),
+        Binding(key="^p", action="palette", description="Command palette"),
+    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -225,7 +228,6 @@ class GitxApp(App):
                 self.app.pop_screen()
 
         self.push_screen(HelpScreen())
-
 
     def action_stage_file(self) -> None:
         """Stage the selected file."""
