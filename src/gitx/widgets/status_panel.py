@@ -14,7 +14,7 @@ class StatusPanel(Static):
             Label("[bold]1-Status[/bold]", classes="section-title"),
             Horizontal(
                 Static("gitx ➜", classes="status-label"),
-                Static("feat/init-git-commands", id="current-branch", classes="status-value"),
+                Static("", id="current-branch", classes="status-value"),
                 classes="status-row"
             ),
             id="status-panel",
@@ -23,28 +23,37 @@ class StatusPanel(Static):
 
     def on_mount(self) -> None:
         """Set up the status panel when mounted."""
-        # Set the branch text with proper styling - green for clean status
-        branch_label = self.query_one("#current-branch", Static)
-        branch_text = Text("feat/init-git-commands")
-        branch_text.stylize("green")
-        branch_label.update(branch_text)
+        self.refresh_status()
 
-    def update_status(self, branch: str, status: str = "clean") -> None:
-        """Update the status information.
+    def refresh_status(self) -> None:
+        """Refresh the status information with current repository state."""
+        try:
+            # Get actual status from git
+            status_info = self.app.git.get_repo_status_summary()
+
+            branch_label = self.query_one("#current-branch", Static)
+            branch_text = Text(f"{status_info['branch']} - {status_info['status']}")
+
+            # Color based on status
+            if "clean" in status_info["status"]:
+                branch_text.stylize("green")
+            elif "modified" in status_info["status"]:
+                branch_text.stylize("red")
+            elif "untracked" in status_info["status"]:
+                branch_text.stylize("magenta")
+
+            branch_label.update(branch_text)
+        except Exception as e:
+            branch_label = self.query_one("#current-branch", Static)
+            error_text = Text(f"Error: {str(e)}")
+            error_text.stylize("red")
+            branch_label.update(error_text)
+
+    def update_status(self, branch: str = None, status: str = None) -> None:
+        """Update the status information manually.
 
         Args:
-            branch: The name of the current branch
-            status: Status string ('clean', 'modified', 'untracked')
+            branch: The name of the current branch (or None to auto-detect)
+            status: Status string ('clean', 'modified', 'untracked', or None to auto-detect)
         """
-        branch_label = self.query_one("#current-branch", Static)
-        branch_text = Text(branch)
-
-        # Color based on status
-        if status == "clean":
-            branch_text.stylize("green")
-        elif status == "modified":
-            branch_text.stylize("red")
-        elif status == "untracked":
-            branch_text.stylize("magenta")
-
-        branch_label.update(branch_text)
+        self.refresh_status()
