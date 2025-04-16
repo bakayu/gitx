@@ -45,7 +45,6 @@ class BranchesPanel(Static):
                     node.label.stylize("green bold")
                     node.label = Text("✓ ") + node.label
 
-
             # Get remote branches
             remote_branches = []
             for branch_info in branches:
@@ -71,6 +70,5 @@ class BranchesPanel(Static):
 
         if hasattr(node, 'data') and node.data and "branch" in node.data:
             branch = node.data["branch"]
-
             # Show dialog to confirm checkout or perform related branch action
             self.app.notify(f"Selected branch: {branch} (checkout not implemented yet)")
