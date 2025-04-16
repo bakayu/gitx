@@ -34,6 +34,10 @@ class GitxApp(App):
         super().__init__(*args, **kwargs)
         self.git = GitHandler()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.git = GitHandler()
+
     def compose(self) -> ComposeResult:
         """Compose the app layout."""
         yield Header(show_clock=True)
