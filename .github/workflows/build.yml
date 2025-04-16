@@ -1,0 +1,47 @@
+name: build
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: 
+      - completed
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+    
+    - name: Configure Poetry
+      run: |
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project false
+    
+    - name: Install dependencies
+      run: |
+        poetry install --with dev
+    
+    - name: Check for compilation errors
+      run: |
+        poetry run python -c "from gitx.app import GitxApp; print('Import successful')"
+    
+    - name: Verify app starts without errors
+      run: |
+        bash scripts/verify.sh
