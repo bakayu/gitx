@@ -18,57 +18,79 @@ class CommitLog(Static):
 
     def on_mount(self) -> None:
         """Set up the commit log when mounted."""
-        log = self.query_one(RichLog)
+        self.refresh_log()
 
-        # Make sure we start with an empty log
+    def refresh_log(self, count: int = 20) -> None:
+        """Refresh the commit log with the latest commits.
+
+        Args:
+            count: Number of commits to show
+        """
+        log = self.query_one(RichLog)
         log.clear()
 
-        # Add dummy data that mimics LazyGit commit log styling
-        log.write("[green]✱[/green] [yellow]commit[/yellow] [green]a215ea6[/green] ([red]HEAD → feat/init-git-commands[/red], [red]feat/init-widgets[/red])")
-        log.write("│ [blue]Author:[/blue] Ayush <mail@ayush.dev>")
-        log.write("│ [blue]Date:[/blue]   3 minutes ago")
-        log.write("│ ")
-        log.write("│     widgets cn 1")
-        log.write("│ ")
-        log.write("│     [blue]Signed-off-by:[/blue] Ayush <mail@ayush.dev>")
-        log.write("│")
-        log.write("[green]✱[/green] [yellow]commit[/yellow] [green]71d3e14[/green] ([red]origin/master[/red], [red]origin/HEAD[/red], [red]master[/red])")
-        log.write("│\\ [blue]Merge:[/blue] 35d7366 6b16804")
-        log.write("│ │ [blue]Author:[/blue] Anmol <anmolarora001@gmail.com>")
-        log.write("│ │ [blue]Date:[/blue]   4 days ago")
-        log.write("│ │ ")
-        log.write("│ │     Merge pull request #12 from gitxtui/feat/init-gitx-app")
-        log.write("│ │ ")
-        log.write("│ │     feat+doc: init base app, change doc site styling")
-        log.write("│ │")
+        try:
+            # Get actual commit history from git
+            commits = self.app.git.get_commit_history(count)
 
-        # Add more commits to simulate a longer history
-        self._add_more_sample_commits(log)
+            if not commits:
+                log.write("[yellow]No commits found in this repository.[/yellow]")
+                return
 
-    def _add_more_sample_commits(self, log):
-        """Add more sample commits to fill the log."""
-        log.write("[green]✱[/green] [yellow]commit[/yellow] [green]6b16804[/green] ([red]origin/feat/init-gitx-app[/red], [red]feat/init-gitx-app[/red])")
-        log.write("│ [blue]Author:[/blue] Ayush <mail@ayush.dev>")
-        log.write("│ [blue]Date:[/blue]   4 days ago")
-        log.write("│ ")
-        log.write("│     feat+doc: init base app, change doc site styling")
-        log.write("│ ")
-        log.write("│     [blue]Signed-off-by:[/blue] Ayush <mail@ayush.dev>")
-        log.write("│")
-        log.write("[green]✱[/green] [yellow]commit[/yellow] [green]35d7366[/green]")
-        log.write("│\\ [blue]Merge:[/blue] 5796a72 86f8adc")
-        log.write("│ │ [blue]Author:[/blue] Ashmit9955 <ashmit9955@gmail.com>")
-        log.write("│ │ [blue]Date:[/blue]   7 days ago")
-        log.write("│ │ ")
-        log.write("│ │     Merge pull request #10 from gitxtui/doc/tutorial-update")
-        log.write("│ │ ")
-        log.write("│ │     Doc/tutorial update")
+            # Get current branch for reference
+            current_branch = self.app.git.get_current_branch()
 
-    def update_log(self, commits):
+            # Format and display the commits
+            for i, commit in enumerate(commits):
+                # Show branch indicator for the first commit
+                branch_indicator = ""
+                if i == 0:
+                    branch_indicator = f"([red]HEAD → {current_branch}[/red])"
+
+                # Display commit in a format similar to git log
+                log.write(f"[green]✱[/green] [yellow]commit[/yellow] [green]{commit['hash']}[/green] {branch_indicator}")
+                log.write(f"│ [blue]Author:[/blue] {commit['author']}")
+                log.write(f"│ [blue]Date:[/blue]   {commit['date']}")
+                log.write("│ ")
+
+                # Format commit message with proper indentation
+                for line in commit['message'].split("\n"):
+                    log.write(f"│     {line}")
+
+                log.write("│")
+        except Exception as e:
+            log.write(f"[red]Error loading commit history: {str(e)}[/red]")
+
+    def on_click(self, event) -> None:
+        """Handle click events to select commits."""
+        # Find which line was clicked
+        log = self.query_one(RichLog)
+
+        try:
+            # Get the line that was clicked
+            line_index = log.get_line_at(event.y)
+            if line_index is None:
+                return
+
+            line = log.get_content_at(line_index)
+
+            # Check if this is a commit line (starts with ✱ commit)
+            if "[green]✱[/green] [yellow]commit[/yellow]" in line:
+                # Extract the commit hash
+                parts = line.split()
+                for i, part in enumerate(parts):
+                    if "[green]" in part and len(part) > 15:  # Likely the hash
+                        # Extract just the hash, removing formatting
+                        commit_hash = part.replace("[green]", "").replace("[/green]", "")
+
+                        # Show commit details in the main panel
+                        main_panel = self.app.query_one('MainPanel')
+                        main_panel.show_commit_details(commit_hash)
+                        break
+        except Exception:
+            # Silently ignore any errors in click handling
+            pass
+
+    def update_log(self, count: int = 20) -> None:
         """Update the commit log with real commit data."""
-        log = self.query_one(RichLog)
-        log.clear()
-
-        # This would be implemented to display actual commit data
-        # For now we'll just display the dummy data
-        self.on_mount()
+        self.refresh_log(count)
