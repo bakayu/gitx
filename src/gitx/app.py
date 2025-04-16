@@ -28,9 +28,6 @@ class GitxApp(App):
         Binding(key="f", action="pull", description="Pull (fetch)"),
         Binding(key="b", action="new_branch", description="New branch"),
         Binding(key="r", action="refresh", description="Refresh"),
-        Binding(key="?", action="toggle_help", description="Help"),
-        Binding(key="^p", action="palette", description="Command palette"),
-    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -228,6 +225,35 @@ class GitxApp(App):
                 self.app.pop_screen()
 
         self.push_screen(HelpScreen())
+
+
+    def action_stage_file(self) -> None:
+        """Stage the selected file."""
+        self.notify("Action: Stage file (not implemented yet)")
+
+    def action_unstage_file(self) -> None:
+        """Unstage the selected file."""
+        self.notify("Action: Unstage file (not implemented yet)")
+
+    def action_commit(self) -> None:
+        """Commit staged changes."""
+        self.notify("Action: Commit (not implemented yet)")
+
+    def action_push(self) -> None:
+        """Push changes to remote."""
+        self.notify("Action: Push (not implemented yet)")
+
+    def action_pull(self) -> None:
+        """Pull changes from remote."""
+        self.notify("Action: Pull (not implemented yet)")
+
+    def action_new_branch(self) -> None:
+        """Create a new branch."""
+        self.notify("Action: New branch (not implemented yet)")
+
+    def action_toggle_help(self) -> None:
+        """Toggle help screen."""
+        self.notify("Action: Help (not implemented yet)")
 
 
 def main() -> None:
