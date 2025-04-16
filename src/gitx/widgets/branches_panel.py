@@ -45,6 +45,7 @@ class BranchesPanel(Static):
                     node.label.stylize("green bold")
                     node.label = Text("✓ ") + node.label
 
+
             # Get remote branches
             remote_branches = []
             for branch_info in branches:
