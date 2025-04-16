@@ -33,9 +33,15 @@ class CommandPanel(Static):
                 output_text = Text(f"$ git {command}\n")
                 output_text.stylize("yellow")
 
-                # Add dummy response
-                response = Text("Executing command...\n")
-                response.stylize("green")
+                # Execute the actual git command
+                success, result = self.app.git.execute_command(command)
+
+                # Format the response based on success/failure
+                response = Text(result + "\n" if result else "Command executed successfully.\n")
+                if success:
+                    response.stylize("green")
+                else:
+                    response.stylize("red")
 
                 output.update(output_text + response)
 
@@ -46,6 +52,9 @@ class CommandPanel(Static):
                 self.app.set_focus(command_input)
 
                 # Notify user about command execution
-                self.app.notify(f"Executed: git {command}")
+                if success:
+                    self.app.notify(f"Executed: git {command}")
+                else:
+                    self.app.notify(f"Error executing: git {command}", severity="error")
             else:
                 self.app.notify("Please enter a command", severity="warning")
